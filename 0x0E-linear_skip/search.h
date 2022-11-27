@@ -1,4 +1,4 @@
-ifndef _SEARCH_H_
+#ifndef _SEARCH_H_
 #define _SEARCH_H_
 
 #include <stddef.h>
