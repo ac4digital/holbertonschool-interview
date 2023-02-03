@@ -1,64 +1,75 @@
-#include <stdlib.h>
-#include <stdio.h>
 #include "sort.h"
 
-
 /**
- * swap - swap function
- * @a: pointer to element to swap
- * @b: pointer to element to swap
+ * heap_sort - Build max heap
+ * @array: array
+ * @size: size of array
  */
-
-void swap(int *a, int *b)
+void heap_sort(int *array, size_t size)
 {
-	int tmp;
 
-	tmp = *a;
-	*a = *b;
-	*b = tmp;
+	size_t i;
+
+	if (array == NULL)
+		return;
+
+	/* Build max heap */
+	for (i = size / 2 ; i > 0; i--)
+		heap_root(array, size, i - 1, size);
+
+	/* Heap sort */
+	for (i = size - 1; i > 0; i--)
+	{
+		swap(&array[0], &array[i], array, size);
+
+		/* Heapify root element to get highest element at root again */
+		heap_root(array, i, 0, size);
+	}
 }
 
+
 /**
- * heapify - heapify function
- *
- * @array: The array to heapify
- * @n: Number of elements in @array
- * @i: index
+ * heap_root - Find largest among root, left child and right chil
+ * @arr: array
+ * @n: size array
+ * @i: current position
+ * @size: size
  */
-void heapify(int array[], int n, int i)
+void heap_root(int *arr, int n, int i, size_t size)
 {
+	/* Find largest among root, left child and right child */
+
 	int largest = i;
-	int l = 2 * i + 1;
-	int r = 2 * i + 2;
+	int left = 2 * i + 1;
+	int right = 2 * i + 2;
 
-	if (l < n && array[l] > array[largest])
-		largest = l;
+	if (left < n && arr[left] > arr[largest])
+		largest = left;
 
-	if (r < n && array[r] > array[largest])
-		largest = r;
+	if (right < n && arr[right] > arr[largest])
+		largest = right;
 
+	/* Swap and continue heapifying if root is not largest */
 	if (largest != i)
 	{
-		swap(&array[i], &array[largest]);
-		heapify(array, n, largest);
+		swap(&arr[i], &arr[largest], arr, size);
+		heap_root(arr, n, largest, size);
 	}
+
 }
 
 /**
- * heap_sort - main function to do heap sort
- *
- * @array: The array to sort
- * @n: Number of elements in @array
+ * swap - Function to swap the the position of two elements
+ * @a: first integer
+ * @b: second integer
+ * @array: array of numbers
+ * @n: size of array
  */
-void heap_sort(int *array, size_t n)
+void swap(int *a, int *b, int *array, size_t n)
 {
-	for (int i = n / 2 - 1; i >= 0; i--)
-		heapify(array, n, i);
 
-	for (int i = n - 1; i > 0; i--)
-	{
-		swap(&array[0], &array[i]);
-		print_array(array, n);
-		heapify(array, i, 0);
-	}
+	int temp = *a;
+	*a = *b;
+	*b = temp;
+	print_array(array, n);
 }
